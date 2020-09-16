@@ -15,6 +15,7 @@
 		15698B8A2512796F0083D008 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 15698B882512796F0083D008 /* LaunchScreen.storyboard */; };
 		15698B95251279700083D008 /* TicTacToeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15698B94251279700083D008 /* TicTacToeTests.swift */; };
 		15698BA125127B250083D008 /* GameEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15698BA025127B250083D008 /* GameEngineTests.swift */; };
+		15698BA4251281430083D008 /* GameEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15698BA3251281430083D008 /* GameEngine.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,7 @@
 		15698B94251279700083D008 /* TicTacToeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeTests.swift; sourceTree = "<group>"; };
 		15698B96251279700083D008 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		15698BA025127B250083D008 /* GameEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEngineTests.swift; sourceTree = "<group>"; };
+		15698BA3251281430083D008 /* GameEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEngine.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +83,7 @@
 		15698B7C2512796C0083D008 /* TicTacToe */ = {
 			isa = PBXGroup;
 			children = (
+				15698BA22512813B0083D008 /* GameEngine */,
 				15698B7D2512796C0083D008 /* AppDelegate.swift */,
 				15698B7F2512796C0083D008 /* SceneDelegate.swift */,
 				15698B812512796C0083D008 /* ViewController.swift */,
@@ -106,6 +109,14 @@
 			isa = PBXGroup;
 			children = (
 				15698BA025127B250083D008 /* GameEngineTests.swift */,
+			);
+			path = GameEngine;
+			sourceTree = "<group>";
+		};
+		15698BA22512813B0083D008 /* GameEngine */ = {
+			isa = PBXGroup;
+			children = (
+				15698BA3251281430083D008 /* GameEngine.swift */,
 			);
 			path = GameEngine;
 			sourceTree = "<group>";
@@ -213,6 +224,7 @@
 				15698B822512796C0083D008 /* ViewController.swift in Sources */,
 				15698B7E2512796C0083D008 /* AppDelegate.swift in Sources */,
 				15698B802512796C0083D008 /* SceneDelegate.swift in Sources */,
+				15698BA4251281430083D008 /* GameEngine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
