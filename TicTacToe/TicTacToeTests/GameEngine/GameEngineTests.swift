@@ -211,6 +211,133 @@ extension GameEngineTests {
 	}
 }
 
+// MARK: - Testing wins for rows
+extension GameEngineTests {
+
+	func test_WhenFirstPlayerMarksEntireRow1_ThenDelegateIsCalled() {
+		// given - initialised
+
+		// when
+		/*
+		X | X | X
+		0 | - | -
+		0 | - | -
+		*/
+		sut.play(atRow: 0, column: 0) // Cross
+		sut.play(atRow: 1, column: 0) // Nought
+		sut.play(atRow: 0, column: 1) // Cross
+		sut.play(atRow: 2, column: 0) // Nought
+		sut.play(atRow: 0, column: 2) // Cross
+
+		// then
+		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertEqual(delegate.gameWonBy, .first)
+	}
+
+	func test_WhenSecondPlayerMarksEntireRow1_ThenDelegateIsCalled() {
+		// given - initialised
+
+		// when
+		/*
+		0 | 0 | 0
+		- | X | X
+		X | - | -
+		*/
+		sut.play(atRow: 2, column: 0) // Cross
+		sut.play(atRow: 0, column: 0) // Nought
+		sut.play(atRow: 1, column: 1) // Cross
+		sut.play(atRow: 0, column: 1) // Nought
+		sut.play(atRow: 1, column: 2) // Cross
+		sut.play(atRow: 0, column: 2) // Nought
+
+		// then
+		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertEqual(delegate.gameWonBy, .second)
+	}
+
+	func test_WhenFirstPlayerMarksEntireRow2_ThenDelegateIsCalled() {
+		// given - initialised
+
+		// when
+		/*
+		- | 0 | -
+		X | X | X
+		- | 0 | -
+		*/
+		sut.play(atRow: 1, column: 0) // Cross
+		sut.play(atRow: 0, column: 1) // Nought
+		sut.play(atRow: 1, column: 1) // Cross
+		sut.play(atRow: 2, column: 1) // Nought
+		sut.play(atRow: 1, column: 2) // Cross
+
+		// then
+		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertEqual(delegate.gameWonBy, .first)
+	}
+
+	func test_WhenSecondPlayerMarksEntireRow2_ThenDelegateIsCalled() {
+		// given - initialised
+
+		// when
+		/*
+		- | X | -
+		0 | 0 | 0
+		X | X | -
+		*/
+		sut.play(atRow: 0, column: 1) // Cross
+		sut.play(atRow: 1, column: 0) // Nought
+		sut.play(atRow: 2, column: 0) // Cross
+		sut.play(atRow: 1, column: 1) // Nought
+		sut.play(atRow: 2, column: 1) // Cross
+		sut.play(atRow: 1, column: 2) // Nought
+
+		// then
+		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertEqual(delegate.gameWonBy, .second)
+	}
+
+	func test_WhenFirstPlayerMarksEntireRow3_ThenDelegateIsCalled() {
+		// given - initialised
+
+		// when
+		/*
+		0 | - | -
+		0 | - | -
+		X | X | X
+		*/
+		sut.play(atRow: 2, column: 0) // Cross
+		sut.play(atRow: 0, column: 0) // Nought
+		sut.play(atRow: 2, column: 1) // Cross
+		sut.play(atRow: 1, column: 0) // Nought
+		sut.play(atRow: 2, column: 2) // Cross
+
+		// then
+		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertEqual(delegate.gameWonBy, .first)
+	}
+
+	func test_WhenSecondPlayerMarksEntireRow3_ThenDelegateIsCalled() {
+		// given - initialised
+
+		// when
+		/*
+		X | X | -
+		X | - | -
+		0 | 0 | 0
+		*/
+		sut.play(atRow: 0, column: 0) // Cross
+		sut.play(atRow: 2, column: 0) // Nought
+		sut.play(atRow: 0, column: 1) // Cross
+		sut.play(atRow: 2, column: 1) // Nought
+		sut.play(atRow: 1, column: 0) // Cross
+		sut.play(atRow: 2, column: 2) // Nought
+
+		// then
+		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertEqual(delegate.gameWonBy, .second)
+	}
+}
+
 class MockDelegate: GameEngineDelegate {
 
 	private(set) var isPlayCalled = false

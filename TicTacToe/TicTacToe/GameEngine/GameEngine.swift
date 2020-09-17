@@ -65,6 +65,13 @@ final class GameEngine {
 			if completed { return true }
 		}
 
+		for row in 0..<boxes.count {
+			let completed = (boxes[row][0] == currentPlayerSymbol &&
+				boxes[row][1] == currentPlayerSymbol &&
+				boxes[row][2] == currentPlayerSymbol)
+			if completed { return true }
+		}
+
 		return false
 	}
 }
