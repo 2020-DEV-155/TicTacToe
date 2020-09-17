@@ -400,6 +400,71 @@ extension GameEngineTests {
 		XCTAssertEqual(delegate.gameWonBy, .first)
 		compare(winningCombination: delegate.winningCombination, with: [ (0,0), (1,1), (2,2)])
 	}
+
+	func test_WhenSecondPlayerMarksLeftToRightDiagonalSequence_ThenDelegateIsCalled() {
+		// given - initialised
+
+		// when
+		/*
+		0 | - | -
+		X | 0 | -
+		X | X | 0
+		*/
+		sut.play(atRow: 1, column: 0) // Cross
+		sut.play(atRow: 0, column: 0) // Nought
+		sut.play(atRow: 2, column: 0) // Cross
+		sut.play(atRow: 1, column: 1) // Nought
+		sut.play(atRow: 2, column: 1) // Cross
+		sut.play(atRow: 2, column: 2) // Nought
+
+		// then
+		assertGameOverTrueAndDrawFalse()
+		XCTAssertEqual(delegate.gameWonBy, .second)
+		compare(winningCombination: delegate.winningCombination, with: [ (0,0), (1,1), (2,2)])
+	}
+
+	func test_WhenFirstPlayerMarksRightToLeftDiagonalSequence_ThenDelegateIsCalled() {
+		// given - initialised
+
+		// when
+		/*
+		0 | - | X
+		- | X | -
+		X | - | 0
+		*/
+		sut.play(atRow: 2, column: 0) // Cross
+		sut.play(atRow: 0, column: 0) // Nought
+		sut.play(atRow: 1, column: 1) // Cross
+		sut.play(atRow: 2, column: 2) // Nought
+		sut.play(atRow: 0, column: 2) // Cross
+
+		// then
+		assertGameOverTrueAndDrawFalse()
+		XCTAssertEqual(delegate.gameWonBy, .first)
+		compare(winningCombination: delegate.winningCombination, with: [ (2,0), (1,1), (0,2)])
+	}
+
+	func test_WhenSecondPlayerMarksRightToLeftDiagonalSequence_ThenDelegateIsCalled() {
+		// given - initialised
+
+		// when
+		/*
+		X | - | 0
+		X | 0 | -
+		0 | X | 0
+		*/
+		sut.play(atRow: 0, column: 0) // Cross
+		sut.play(atRow: 0, column: 2) // Nought
+		sut.play(atRow: 1, column: 0) // Cross
+		sut.play(atRow: 1, column: 1) // Nought
+		sut.play(atRow: 2, column: 1) // Cross
+		sut.play(atRow: 2, column: 0) // Nought
+
+		// then
+		assertGameOverTrueAndDrawFalse()
+		XCTAssertEqual(delegate.gameWonBy, .second)
+		compare(winningCombination: delegate.winningCombination, with: [ (2,0), (1,1), (0,2)])
+	}
 }
 
 class MockDelegate: GameEngineDelegate {

@@ -80,6 +80,12 @@ final class GameEngine {
 			boxes[2][2] == currentPlayerSymbol) {
 			return delegate.gameOver(result: .win(currentTurn, [ (0, 0), (1, 1), (2, 2) ]))
 		}
+
+		if (boxes[2][0] == currentPlayerSymbol &&
+			boxes[1][1] == currentPlayerSymbol &&
+			boxes[0][2] == currentPlayerSymbol) {
+			return delegate.gameOver(result: .win(currentTurn, [ (2, 0), (1, 1), (0, 2) ]))
+		}
 	}
 }
 
