@@ -24,6 +24,11 @@ class GameEngineTests: XCTestCase {
 		XCTAssertEqual(winningCombination?[2].1, expected[2].1)
 	}
 
+	private func assertGameOverTrueAndDrawFalse() {
+		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertFalse(delegate.isGameDraw)
+	}
+
 	func test_WhenInitialised_ThenPlayer1HasTurn() {
 		// given & when - initialised
 
@@ -125,8 +130,7 @@ extension GameEngineTests {
 		sut.play(atRow: 2, column: 0) // Cross
 
 		// then
-		XCTAssertTrue(delegate.isGameoverCalled)
-		XCTAssertFalse(delegate.isGameDraw)
+		assertGameOverTrueAndDrawFalse()
 		XCTAssertEqual(delegate.gameWonBy, .first)
 		compare(winningCombination: delegate.winningCombination, with: [ (0,0), (1,0), (2,0)])
 	}
@@ -148,8 +152,7 @@ extension GameEngineTests {
 		sut.play(atRow: 2, column: 0) // Nought
 
 		// then
-		XCTAssertTrue(delegate.isGameoverCalled)
-		XCTAssertFalse(delegate.isGameDraw)
+		assertGameOverTrueAndDrawFalse()
 		XCTAssertEqual(delegate.gameWonBy, .second)
 		compare(winningCombination: delegate.winningCombination, with: [ (0,0), (1,0), (2,0)])
 	}
@@ -170,8 +173,7 @@ extension GameEngineTests {
 		sut.play(atRow: 2, column: 1) // Cross
 
 		// then
-		XCTAssertTrue(delegate.isGameoverCalled)
-		XCTAssertFalse(delegate.isGameDraw)
+		assertGameOverTrueAndDrawFalse()
 		XCTAssertEqual(delegate.gameWonBy, .first)
 		compare(winningCombination: delegate.winningCombination, with: [ (0,1), (1,1), (2,1)])
 	}
@@ -193,8 +195,7 @@ extension GameEngineTests {
 		sut.play(atRow: 2, column: 1) // Nought
 
 		// then
-		XCTAssertTrue(delegate.isGameoverCalled)
-		XCTAssertFalse(delegate.isGameDraw)
+		assertGameOverTrueAndDrawFalse()
 		XCTAssertEqual(delegate.gameWonBy, .second)
 		compare(winningCombination: delegate.winningCombination, with: [ (0,1), (1,1), (2,1)])
 	}
@@ -215,8 +216,7 @@ extension GameEngineTests {
 		sut.play(atRow: 2, column: 2) // Cross
 
 		// then
-		XCTAssertTrue(delegate.isGameoverCalled)
-		XCTAssertFalse(delegate.isGameDraw)
+		assertGameOverTrueAndDrawFalse()
 		XCTAssertEqual(delegate.gameWonBy, .first)
 		compare(winningCombination: delegate.winningCombination, with: [ (0,2), (1,2), (2,2)])
 	}
@@ -238,8 +238,7 @@ extension GameEngineTests {
 		sut.play(atRow: 2, column: 2) // Nought
 
 		// then
-		XCTAssertTrue(delegate.isGameoverCalled)
-		XCTAssertFalse(delegate.isGameDraw)
+		assertGameOverTrueAndDrawFalse()
 		XCTAssertEqual(delegate.gameWonBy, .second)
 		compare(winningCombination: delegate.winningCombination, with: [ (0,2), (1,2), (2,2)])
 	}
@@ -264,8 +263,7 @@ extension GameEngineTests {
 		sut.play(atRow: 0, column: 2) // Cross
 
 		// then
-		XCTAssertTrue(delegate.isGameoverCalled)
-		XCTAssertFalse(delegate.isGameDraw)
+		assertGameOverTrueAndDrawFalse()
 		XCTAssertEqual(delegate.gameWonBy, .first)
 		compare(winningCombination: delegate.winningCombination, with: [ (0,0), (0,1), (0,2)])
 	}
@@ -287,8 +285,7 @@ extension GameEngineTests {
 		sut.play(atRow: 0, column: 2) // Nought
 
 		// then
-		XCTAssertTrue(delegate.isGameoverCalled)
-		XCTAssertFalse(delegate.isGameDraw)
+		assertGameOverTrueAndDrawFalse()
 		XCTAssertEqual(delegate.gameWonBy, .second)
 		compare(winningCombination: delegate.winningCombination, with: [ (0,0), (0,1), (0,2)])
 	}
@@ -309,8 +306,7 @@ extension GameEngineTests {
 		sut.play(atRow: 1, column: 2) // Cross
 
 		// then
-		XCTAssertTrue(delegate.isGameoverCalled)
-		XCTAssertFalse(delegate.isGameDraw)
+		assertGameOverTrueAndDrawFalse()
 		XCTAssertEqual(delegate.gameWonBy, .first)
 		compare(winningCombination: delegate.winningCombination, with: [ (1,0), (1,1), (1,2)])
 	}
@@ -332,8 +328,7 @@ extension GameEngineTests {
 		sut.play(atRow: 1, column: 2) // Nought
 
 		// then
-		XCTAssertTrue(delegate.isGameoverCalled)
-		XCTAssertFalse(delegate.isGameDraw)
+		assertGameOverTrueAndDrawFalse()
 		XCTAssertEqual(delegate.gameWonBy, .second)
 		compare(winningCombination: delegate.winningCombination, with: [ (1,0), (1,1), (1,2)])
 	}
@@ -354,8 +349,7 @@ extension GameEngineTests {
 		sut.play(atRow: 2, column: 2) // Cross
 
 		// then
-		XCTAssertTrue(delegate.isGameoverCalled)
-		XCTAssertFalse(delegate.isGameDraw)
+		assertGameOverTrueAndDrawFalse()
 		XCTAssertEqual(delegate.gameWonBy, .first)
 		compare(winningCombination: delegate.winningCombination, with: [ (2,0), (2,1), (2,2)])
 	}
@@ -377,8 +371,7 @@ extension GameEngineTests {
 		sut.play(atRow: 2, column: 2) // Nought
 
 		// then
-		XCTAssertTrue(delegate.isGameoverCalled)
-		XCTAssertFalse(delegate.isGameDraw)
+		assertGameOverTrueAndDrawFalse()
 		XCTAssertEqual(delegate.gameWonBy, .second)
 		compare(winningCombination: delegate.winningCombination, with: [ (2,0), (2,1), (2,2)])
 	}
