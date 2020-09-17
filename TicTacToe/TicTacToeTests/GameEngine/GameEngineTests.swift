@@ -3,24 +3,27 @@ import XCTest
 
 class GameEngineTests: XCTestCase {
 
-	var sut: GameEngine!
+	private var sut: GameEngine!
+	private var delegate: MockDelegate!
+
+	override func setUpWithError() throws {
+		delegate = MockDelegate()
+		sut = GameEngine(delegate: delegate)
+	}
 
     override func tearDownWithError() throws {
 		sut = nil
     }
 
 	func test_WhenInitialised_ThenPlayer1HasTurn() {
-		// given & when
-		sut = GameEngine(delegate: MockDelegate())
+		// given & when - initialised
 
 		// then
 		XCTAssertEqual(sut.currentTurn, .first)
 	}
 
 	func test_WhenFirstMoveIsPlayed_ThenDelegateIsCalledAndFirstTurnIsCross() {
-		// given
-		let delegate = MockDelegate()
-		sut = GameEngine(delegate: delegate)
+		// given - initialised
 
 		// when
 		sut.play(atRow: 0, column: 0)
@@ -33,9 +36,7 @@ class GameEngineTests: XCTestCase {
 	}
 
 	func test_WhenTwoMovesArePlayed_ThenSecondTurnIsNought() {
-		// given
-		let delegate = MockDelegate()
-		sut = GameEngine(delegate: delegate)
+		// given - initialised
 
 		// when
 		sut.play(atRow: 0, column: 1)
@@ -49,8 +50,7 @@ class GameEngineTests: XCTestCase {
 	}
 
 	func test_WhenNoMovesArePlayed_ThenTheBoxesAreEmpty() {
-		// given
-		sut = GameEngine(delegate: MockDelegate())
+		// given - initialised
 
 		// when - no moves are played
 
@@ -67,8 +67,7 @@ class GameEngineTests: XCTestCase {
 	}
 
 	func test_WhenFirstMoveIsPlayed_ThenOnlyTheSpecifiedBoxIsFilled() {
-		// given
-		sut = GameEngine(delegate: MockDelegate())
+		// given - initialised
 
 		// when
 		sut.play(atRow: 0, column: 1)
@@ -86,9 +85,7 @@ class GameEngineTests: XCTestCase {
 	}
 
 	func test_WhenFirstPlayerMarksEntireColumn1_ThenDelegateIsCalled() {
-		// given
-		let delegate = MockDelegate()
-		sut = GameEngine(delegate: delegate)
+		// given - initialised
 
 		// when
 		/*
@@ -108,9 +105,7 @@ class GameEngineTests: XCTestCase {
 	}
 
 	func test_WhenSecondPlayerMarksEntireColumn1_ThenDelegateIsCalled() {
-		// given
-		let delegate = MockDelegate()
-		sut = GameEngine(delegate: delegate)
+		// given - initialised
 
 		// when
 		/*
@@ -131,9 +126,7 @@ class GameEngineTests: XCTestCase {
 	}
 
 	func test_WhenFirstPlayerMarksEntireColumn2_ThenDelegateIsCalled() {
-		// given
-		let delegate = MockDelegate()
-		sut = GameEngine(delegate: delegate)
+		// given - initialised
 
 		// when
 		/*
@@ -153,9 +146,7 @@ class GameEngineTests: XCTestCase {
 	}
 
 	func test_WhenSecondPlayerMarksEntireColumn2_ThenDelegateIsCalled() {
-		// given
-		let delegate = MockDelegate()
-		sut = GameEngine(delegate: delegate)
+		// given - initialised
 
 		// when
 		/*
@@ -176,9 +167,7 @@ class GameEngineTests: XCTestCase {
 	}
 
 	func test_WhenFirstPlayerMarksEntireColumn3_ThenDelegateIsCalled() {
-		// given
-		let delegate = MockDelegate()
-		sut = GameEngine(delegate: delegate)
+		// given - initialised
 
 		// when
 		/*
@@ -198,9 +187,7 @@ class GameEngineTests: XCTestCase {
 	}
 
 	func test_WhenSecondPlayerMarksEntireColumn3_ThenDelegateIsCalled() {
-		// given
-		let delegate = MockDelegate()
-		sut = GameEngine(delegate: delegate)
+		// given - initialised
 
 		// when
 		/*
