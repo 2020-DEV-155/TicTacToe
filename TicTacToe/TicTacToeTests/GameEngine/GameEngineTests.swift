@@ -84,6 +84,23 @@ class GameEngineTests: XCTestCase {
 		XCTAssertEqual(sut.boxes[2][1], .empty)
 		XCTAssertEqual(sut.boxes[2][2], .empty)
 	}
+
+	func test_WhenFirstPlayerMarksEntireColumn1Vertically_ThenDelegateIsCalled() {
+		// given
+		let delegate = MockDelegate()
+		sut = GameEngine(delegate: delegate)
+
+		// when
+		sut.play(atRow: 0, column: 0) // Cross
+		sut.play(atRow: 0, column: 1) // Nought
+		sut.play(atRow: 1, column: 0) // Cross
+		sut.play(atRow: 1, column: 1) // Nought
+		sut.play(atRow: 2, column: 0) // Cross
+
+		// then
+		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertEqual(delegate.gameWonBy, .first)
+	}
 }
 
 class MockDelegate: GameEngineDelegate {
@@ -93,10 +110,18 @@ class MockDelegate: GameEngineDelegate {
 	private(set) var playedColumn: Int?
 	private(set) var by: Player?
 
+	private(set) var isGameoverCalled = false
+	private(set) var gameWonBy: Player?
+
 	func played(at row: Int, column: Int, by player: Player) {
 		isPlayCalled = true
 		playedRow = row
 		playedColumn = column
 		by = player
+	}
+
+	func gameOver(by player: Player) {
+		isGameoverCalled = true
+		gameWonBy = player
 	}
 }

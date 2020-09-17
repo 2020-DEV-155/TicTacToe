@@ -14,6 +14,8 @@ enum Symbols {
 protocol GameEngineDelegate {
 
 	func played(at row: Int, column: Int, by player: Player)
+
+	func gameOver(by player: Player)
 }
 
 final class GameEngine {
@@ -21,7 +23,13 @@ final class GameEngine {
 	let delegate: GameEngineDelegate
 
 	private(set) var currentTurn: Player = .first
-	private(set) var boxes: [[Symbols]]
+	private(set) var boxes: [[Symbols]] {
+		didSet {
+			if isGameOver() {
+				delegate.gameOver(by: currentTurn)
+			}
+		}
+	}
 
 	init(delegate: GameEngineDelegate) {
 		self.delegate = delegate
@@ -41,5 +49,21 @@ final class GameEngine {
 		case .first: currentTurn = .second
 		case .second: currentTurn = .first
 		}
+	}
+
+	private func isGameOver() -> Bool {
+		let currentPlayerSymbol: Symbols!
+		switch currentTurn {
+		case .first: currentPlayerSymbol = .cross
+		case .second: currentPlayerSymbol = .nought
+		}
+
+		if boxes[0][0] == currentPlayerSymbol,
+			boxes[1][0] == currentPlayerSymbol,
+			boxes[2][0] == currentPlayerSymbol {
+			// First column
+			return true
+		}
+		return false
 	}
 }
