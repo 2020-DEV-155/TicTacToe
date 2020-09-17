@@ -58,38 +58,15 @@ final class GameEngine {
 	private func checkForGameResult() {
 		let currentPlayerSymbol: Symbols = (currentTurn == .first) ? .cross : .nought
 
-		// Checking if any columns has been marked by a single player, so we can declare as a win
-		for column in 0..<boxes.count {
-			guard (boxes[0][column] == currentPlayerSymbol &&
-				boxes[1][column] == currentPlayerSymbol &&
-				boxes[2][column] == currentPlayerSymbol) else { continue }
-			return delegate.gameOver(result: .win(currentTurn, [ (0, column), (1, column), (2, column) ]))
-		}
+		guard !checkForColumsWin(currentPlayerSymbol) else { return }
 
-		// Checking if any rows has been marked by a single player, so we can declare as a win
-		for row in 0..<boxes.count {
-			guard (boxes[row][0] == currentPlayerSymbol &&
-				boxes[row][1] == currentPlayerSymbol &&
-				boxes[row][2] == currentPlayerSymbol) else { continue }
-			return delegate.gameOver(result: .win(currentTurn, [ (row, 0), (row, 1), (row, 2) ]))
-		}
+		guard !checkForRowsWin(currentPlayerSymbol) else { return }
 
-		// Checking if left to right diagonal sequence is marked
-		if (boxes[0][0] == currentPlayerSymbol &&
-			boxes[1][1] == currentPlayerSymbol &&
-			boxes[2][2] == currentPlayerSymbol) {
-			return delegate.gameOver(result: .win(currentTurn, [ (0, 0), (1, 1), (2, 2) ]))
-		}
+		guard !checkForLeftToRightDiagonalWin(currentPlayerSymbol) else { return }
 
-		if (boxes[2][0] == currentPlayerSymbol &&
-			boxes[1][1] == currentPlayerSymbol &&
-			boxes[0][2] == currentPlayerSymbol) {
-			return delegate.gameOver(result: .win(currentTurn, [ (2, 0), (1, 1), (0, 2) ]))
-		}
+		guard !checkForRightToLeftDiagonalWin(currentPlayerSymbol) else { return }
 
-		if areAllBoxesFilled() {
-			return delegate.gameOver(result: .draw)
-		}
+		guard !checkForDraw() else { return }
 	}
 
 	private func areAllBoxesFilled() -> Bool {
@@ -100,6 +77,54 @@ final class GameEngine {
 				return false
 			}
 		}
+		return true
+	}
+
+	private func checkForColumsWin(_ currentPlayerSymbol: Symbols) -> Bool {
+		// Checking if any columns has been marked by a single player, so we can declare as a win
+		for column in 0..<boxes.count {
+			guard (boxes[0][column] == currentPlayerSymbol &&
+				boxes[1][column] == currentPlayerSymbol &&
+				boxes[2][column] == currentPlayerSymbol) else { continue }
+			delegate.gameOver(result: .win(currentTurn, [ (0, column), (1, column), (2, column) ]))
+			return true
+		}
+		return false
+	}
+
+	private func checkForRowsWin(_ currentPlayerSymbol: Symbols) -> Bool {
+		// Checking if any rows has been marked by a single player, so we can declare as a win
+		for row in 0..<boxes.count {
+			guard (boxes[row][0] == currentPlayerSymbol &&
+				boxes[row][1] == currentPlayerSymbol &&
+				boxes[row][2] == currentPlayerSymbol) else { continue }
+			delegate.gameOver(result: .win(currentTurn, [ (row, 0), (row, 1), (row, 2) ]))
+			return true
+		}
+		return false
+	}
+
+	private func checkForLeftToRightDiagonalWin(_ currentPlayerSymbol: Symbols) -> Bool {
+		// Checking if left to right diagonal sequence is marked
+		guard (boxes[0][0] == currentPlayerSymbol &&
+			boxes[1][1] == currentPlayerSymbol &&
+			boxes[2][2] == currentPlayerSymbol) else { return false }
+		delegate.gameOver(result: .win(currentTurn, [ (0, 0), (1, 1), (2, 2) ]))
+		return true
+	}
+
+	private func checkForRightToLeftDiagonalWin(_ currentPlayerSymbol: Symbols) -> Bool {
+		// Checking if left to right diagonal sequence is marked
+		guard (boxes[2][0] == currentPlayerSymbol &&
+			boxes[1][1] == currentPlayerSymbol &&
+			boxes[0][2] == currentPlayerSymbol) else { return false }
+		delegate.gameOver(result: .win(currentTurn, [ (2, 0), (1, 1), (0, 2) ]))
+		return true
+	}
+
+	private func checkForDraw() -> Bool {
+		guard areAllBoxesFilled() else { return false }
+		delegate.gameOver(result: .draw)
 		return true
 	}
 }
