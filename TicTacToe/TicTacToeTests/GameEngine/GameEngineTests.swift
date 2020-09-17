@@ -549,6 +549,9 @@ extension GameEngineTests {
 		sut.play(atRow: 2, column: 1) // Nought
 		sut.play(atRow: 0, column: 2) // Cross
 
+		XCTAssertTrue(delegate.isPlayCalled)
+		XCTAssertEqual(delegate.playedRow, 0)
+		XCTAssertEqual(delegate.playedColumn, 2)
 		XCTAssertTrue(delegate.isGameoverCalled)
 		XCTAssertFalse(delegate.isGameDraw)
 		XCTAssertEqual(delegate.gameWonBy, .first)
@@ -557,6 +560,9 @@ extension GameEngineTests {
 		sut.play(atRow: 1, column: 2) // Nought
 
 		// then
+		XCTAssertEqual(delegate.playedRow, 0)
+		XCTAssertEqual(delegate.playedColumn, 2)
+		
 		XCTAssertTrue(delegate.moveRejectedCalled)
 		XCTAssertEqual(delegate.rejectedRow, 1)
 		XCTAssertEqual(delegate.rejectedColumn, 2)
@@ -617,7 +623,7 @@ class MockDelegate: GameEngineDelegate {
 	private(set) var rejectedRow: Int?
 	private(set) var rejectedColumn: Int?
 
-	func played(at row: Int, column: Int, by player: Player) {
+	func played(at row: Int, column: Int, by player: Player, symbol: Symbols) {
 		isPlayCalled = true
 		playedRow = row
 		playedColumn = column

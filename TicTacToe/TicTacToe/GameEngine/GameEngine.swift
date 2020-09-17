@@ -13,7 +13,7 @@ enum Symbols {
 
 protocol GameEngineDelegate {
 
-	func played(at row: Int, column: Int, by player: Player)
+	func played(at row: Int, column: Int, by player: Player, symbol: Symbols)
 
 	func gameOver(result: GameEngine.Result)
 
@@ -30,6 +30,7 @@ final class GameEngine {
 			checkForGameResult()
 		}
 	}
+	private(set) var result: Result?
 
 	init(delegate: GameEngineDelegate) {
 		self.delegate = delegate
@@ -38,11 +39,17 @@ final class GameEngine {
 
 	func play(atRow row: Int, column: Int) {
 
+		// If game is already over then do not proceed
+		guard result == nil else {
+			delegate.rejected(at: row, column: column)
+			return
+		}
+
 		// Make the move
-		fill(at: row, column: column)
+		guard let symbol = fill(at: row, column: column) else { return }
 
 		// Update the delegate
-		delegate.played(at: row, column: column, by: currentTurn)
+		delegate.played(at: row, column: column, by: currentTurn, symbol: symbol)
 
 		// Switch the turn
 		currentTurn = (currentTurn == .first) ? .second : .first
@@ -51,13 +58,16 @@ final class GameEngine {
 	func reset() {
 		currentTurn = .first
 		boxes = Array(repeating: Array(repeating: .empty, count: 3), count: 3)
+		result = nil
 	}
 
-	private func fill(at row: Int, column: Int) {
+	private func fill(at row: Int, column: Int) -> Symbols? {
 		guard boxes[row][column] == .empty else {
-			return delegate.rejected(at: row, column: column)
+			delegate.rejected(at: row, column: column)
+			return nil
 		}
 		boxes[row][column] = (currentTurn == .first) ? .cross : .nought
+		return boxes[row][column]
 	}
 
 	private func checkForGameResult() {
@@ -80,7 +90,10 @@ final class GameEngine {
 			guard (boxes[0][column] == currentPlayerSymbol &&
 				boxes[1][column] == currentPlayerSymbol &&
 				boxes[2][column] == currentPlayerSymbol) else { continue }
-			delegate.gameOver(result: .win(currentTurn, [ (0, column), (1, column), (2, column) ]))
+
+			let result = Result.win(currentTurn, [ (0, column), (1, column), (2, column) ])
+			self.result = result
+			delegate.gameOver(result: result)
 			return true
 		}
 		return false
@@ -92,7 +105,9 @@ final class GameEngine {
 			guard (boxes[row][0] == currentPlayerSymbol &&
 				boxes[row][1] == currentPlayerSymbol &&
 				boxes[row][2] == currentPlayerSymbol) else { continue }
-			delegate.gameOver(result: .win(currentTurn, [ (row, 0), (row, 1), (row, 2) ]))
+			let result = Result.win(currentTurn, [ (row, 0), (row, 1), (row, 2) ])
+			self.result = result
+			delegate.gameOver(result: result)
 			return true
 		}
 		return false
@@ -103,7 +118,9 @@ final class GameEngine {
 		guard (boxes[0][0] == currentPlayerSymbol &&
 			boxes[1][1] == currentPlayerSymbol &&
 			boxes[2][2] == currentPlayerSymbol) else { return false }
-		delegate.gameOver(result: .win(currentTurn, [ (0, 0), (1, 1), (2, 2) ]))
+		let result = Result.win(currentTurn, [ (0, 0), (1, 1), (2, 2) ])
+		self.result = result
+		delegate.gameOver(result: result)
 		return true
 	}
 
@@ -112,13 +129,16 @@ final class GameEngine {
 		guard (boxes[2][0] == currentPlayerSymbol &&
 			boxes[1][1] == currentPlayerSymbol &&
 			boxes[0][2] == currentPlayerSymbol) else { return false }
-		delegate.gameOver(result: .win(currentTurn, [ (2, 0), (1, 1), (0, 2) ]))
+		let result = Result.win(currentTurn, [ (2, 0), (1, 1), (0, 2) ])
+		self.result = result
+		delegate.gameOver(result: result)
 		return true
 	}
 
 	private func checkForDrawAfterWinningChecksAreCompleted() -> Bool {
 		guard areAllBoxesFilled() else { return false }
 		delegate.gameOver(result: .draw)
+		result = .draw
 		return true
 	}
 
