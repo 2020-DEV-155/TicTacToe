@@ -174,6 +174,51 @@ class GameEngineTests: XCTestCase {
 		XCTAssertTrue(delegate.isGameoverCalled)
 		XCTAssertEqual(delegate.gameWonBy, .second)
 	}
+
+	func test_WhenFirstPlayerMarksEntireColumn3_ThenDelegateIsCalled() {
+		// given
+		let delegate = MockDelegate()
+		sut = GameEngine(delegate: delegate)
+
+		// when
+		/*
+		0 | - | X
+		0 | - | X
+		- | - | X
+		*/
+		sut.play(atRow: 0, column: 2) // Cross
+		sut.play(atRow: 0, column: 0) // Nought
+		sut.play(atRow: 1, column: 2) // Cross
+		sut.play(atRow: 1, column: 0) // Nought
+		sut.play(atRow: 2, column: 2) // Cross
+
+		// then
+		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertEqual(delegate.gameWonBy, .first)
+	}
+
+	func test_WhenSecondPlayerMarksEntireColumn3_ThenDelegateIsCalled() {
+		// given
+		let delegate = MockDelegate()
+		sut = GameEngine(delegate: delegate)
+
+		// when
+		/*
+		X | X | 0
+		X | - | 0
+		- | - | 0
+		*/
+		sut.play(atRow: 0, column: 0) // Cross
+		sut.play(atRow: 0, column: 2) // Nought
+		sut.play(atRow: 1, column: 0) // Cross
+		sut.play(atRow: 1, column: 2) // Nought
+		sut.play(atRow: 0, column: 1) // Cross
+		sut.play(atRow: 2, column: 2) // Nought
+
+		// then
+		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertEqual(delegate.gameWonBy, .second)
+	}
 }
 
 class MockDelegate: GameEngineDelegate {
