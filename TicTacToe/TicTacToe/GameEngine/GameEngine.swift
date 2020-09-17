@@ -86,6 +86,21 @@ final class GameEngine {
 			boxes[0][2] == currentPlayerSymbol) {
 			return delegate.gameOver(result: .win(currentTurn, [ (2, 0), (1, 1), (0, 2) ]))
 		}
+
+		if areAllBoxesFilled() {
+			return delegate.gameOver(result: .draw)
+		}
+	}
+
+	private func areAllBoxesFilled() -> Bool {
+		for column in 0..<boxes.count {
+			if (boxes[0][column] == .empty ||
+				boxes[1][column] == .empty ||
+				boxes[2][column] == .empty) {
+				return false
+			}
+		}
+		return true
 	}
 }
 

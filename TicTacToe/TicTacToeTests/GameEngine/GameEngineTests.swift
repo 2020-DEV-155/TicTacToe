@@ -467,6 +467,36 @@ extension GameEngineTests {
 	}
 }
 
+// MARK: Testing draws
+extension GameEngineTests {
+
+	func test_WhenAllBoxesAreMarkedAndNoSequencesWin_ThenDelegateIsCalledAndGameIsDrawn() {
+		// given - initialised
+
+		// when
+		/*
+		X | X | 0
+		0 | 0 | X
+		X | 0 | X
+		*/
+		sut.play(atRow: 0, column: 0) // Cross
+		sut.play(atRow: 0, column: 2) // Nought
+		sut.play(atRow: 0, column: 1) // Cross
+		sut.play(atRow: 1, column: 0) // Nought
+		sut.play(atRow: 1, column: 2) // Cross
+		sut.play(atRow: 1, column: 1) // Nought
+		sut.play(atRow: 2, column: 0) // Cross
+		sut.play(atRow: 2, column: 1) // Nought
+		sut.play(atRow: 2, column: 2) // Cross
+
+		// then
+		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertTrue(delegate.isGameDraw)
+		XCTAssertNil(delegate.gameWonBy)
+		XCTAssertNil(delegate.winningCombination)
+	}
+}
+
 class MockDelegate: GameEngineDelegate {
 
 	private(set) var isPlayCalled = false
