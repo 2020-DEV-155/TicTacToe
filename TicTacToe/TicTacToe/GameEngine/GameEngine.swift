@@ -48,6 +48,11 @@ final class GameEngine {
 		currentTurn = (currentTurn == .first) ? .second : .first
 	}
 
+	func reset() {
+		currentTurn = .first
+		boxes = Array(repeating: Array(repeating: .empty, count: 3), count: 3)
+	}
+
 	private func fill(at row: Int, column: Int) {
 		guard boxes[row][column] == .empty else {
 			return delegate.rejected(at: row, column: column)

@@ -11,9 +11,9 @@ class GameEngineTests: XCTestCase {
 		sut = GameEngine(delegate: delegate)
 	}
 
-    override func tearDownWithError() throws {
+	override func tearDownWithError() throws {
 		sut = nil
-    }
+	}
 
 	private func compare(winningCombination: [(Int, Int)]?, with expected: [(Int, Int)]) {
 		XCTAssertEqual(winningCombination?[0].0, expected[0].0)
@@ -562,6 +562,44 @@ extension GameEngineTests {
 	}
 }
 
+// MARK: - Test game reset
+extension GameEngineTests {
+
+	func test_WhenGameIsOverAndResetIsDone_ThenGameIsReset() {
+		// given - initialised
+		/*
+		X | X | 0
+		0 | 0 | X
+		X | 0 | X
+		*/
+		sut.play(atRow: 0, column: 0) // Cross
+		sut.play(atRow: 0, column: 2) // Nought
+		sut.play(atRow: 0, column: 1) // Cross
+		sut.play(atRow: 1, column: 0) // Nought
+		sut.play(atRow: 1, column: 2) // Cross
+		sut.play(atRow: 1, column: 1) // Nought
+		sut.play(atRow: 2, column: 0) // Cross
+		sut.play(atRow: 2, column: 1) // Nought
+		sut.play(atRow: 2, column: 2) // Cross
+
+		// when
+		sut.reset()
+		delegate.reset()
+
+		// then
+		XCTAssertEqual(sut.currentTurn, .first)
+		XCTAssertEqual(sut.boxes[0][0], .empty)
+		XCTAssertEqual(sut.boxes[0][1], .empty)
+		XCTAssertEqual(sut.boxes[0][2], .empty)
+		XCTAssertEqual(sut.boxes[1][0], .empty)
+		XCTAssertEqual(sut.boxes[1][1], .empty)
+		XCTAssertEqual(sut.boxes[1][2], .empty)
+		XCTAssertEqual(sut.boxes[2][0], .empty)
+		XCTAssertEqual(sut.boxes[2][1], .empty)
+		XCTAssertEqual(sut.boxes[2][2], .empty)
+	}
+}
+
 class MockDelegate: GameEngineDelegate {
 
 	private(set) var isPlayCalled = false
@@ -600,5 +638,19 @@ class MockDelegate: GameEngineDelegate {
 		moveRejectedCalled = true
 		rejectedRow = row
 		rejectedColumn = column
+	}
+
+	func reset() {
+		isPlayCalled = false
+		playedRow = nil
+		playedColumn = nil
+		by = nil
+		isGameoverCalled = false
+		isGameDraw = false
+		gameWonBy = nil
+		winningCombination = nil
+		moveRejectedCalled = false
+		rejectedRow = nil
+		rejectedColumn = nil
 	}
 }
