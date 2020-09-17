@@ -13,6 +13,7 @@ class GameEngineTests: XCTestCase {
 
 	override func tearDownWithError() throws {
 		sut = nil
+		delegate = nil
 	}
 
 	private func compare(winningCombination: [(Int, Int)]?, with expected: [(Int, Int)]) {
