@@ -467,7 +467,7 @@ extension GameEngineTests {
 	}
 }
 
-// MARK: Testing draws
+// MARK: - Testing draws
 extension GameEngineTests {
 
 	func test_WhenAllBoxesAreMarkedAndNoSequencesWin_ThenDelegateIsCalledAndGameIsDrawn() {
@@ -494,6 +494,71 @@ extension GameEngineTests {
 		XCTAssertTrue(delegate.isGameDraw)
 		XCTAssertNil(delegate.gameWonBy)
 		XCTAssertNil(delegate.winningCombination)
+	}
+}
+
+// MARK: - Testing move rejection after game is already over
+extension GameEngineTests {
+
+	func test_WhenGameHasAlreadyDrawnAndPlayerMakesAMove_ThenMoveIsRejected() {
+		// given - initialised
+		/*
+		X | X | 0
+		0 | 0 | X
+		X | 0 | X
+		*/
+		sut.play(atRow: 0, column: 0) // Cross
+		sut.play(atRow: 0, column: 2) // Nought
+		sut.play(atRow: 0, column: 1) // Cross
+		sut.play(atRow: 1, column: 0) // Nought
+		sut.play(atRow: 1, column: 2) // Cross
+		sut.play(atRow: 1, column: 1) // Nought
+		sut.play(atRow: 2, column: 0) // Cross
+		sut.play(atRow: 2, column: 1) // Nought
+		sut.play(atRow: 2, column: 2) // Cross
+
+		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertTrue(delegate.isGameDraw)
+		XCTAssertNil(delegate.gameWonBy)
+		XCTAssertNil(delegate.winningCombination)
+
+		// when
+		sut.play(atRow: 1, column: 2) // Nought
+
+		// then
+		XCTAssertTrue(delegate.moveRejectedCalled)
+		XCTAssertEqual(delegate.rejectedRow, 1)
+		XCTAssertEqual(delegate.rejectedColumn, 2)
+	}
+
+	func test_WhenGameHasAlreadyWonByPlayer1AndAMoveIsMade_ThenMoveIsRejected() {
+		// given - initialised
+		/*
+		X | X | X
+		0 | 0 | X
+		0 | 0 | X
+		*/
+		sut.play(atRow: 0, column: 0) // Cross
+		sut.play(atRow: 1, column: 0) // Nought
+		sut.play(atRow: 0, column: 1) // Cross
+		sut.play(atRow: 2, column: 0) // Nought
+		sut.play(atRow: 1, column: 2) // Cross
+		sut.play(atRow: 1, column: 1) // Nought
+		sut.play(atRow: 2, column: 2) // Cross
+		sut.play(atRow: 2, column: 1) // Nought
+		sut.play(atRow: 0, column: 2) // Cross
+
+		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertFalse(delegate.isGameDraw)
+		XCTAssertEqual(delegate.gameWonBy, .first)
+
+		// when
+		sut.play(atRow: 1, column: 2) // Nought
+
+		// then
+		XCTAssertTrue(delegate.moveRejectedCalled)
+		XCTAssertEqual(delegate.rejectedRow, 1)
+		XCTAssertEqual(delegate.rejectedColumn, 2)
 	}
 }
 
