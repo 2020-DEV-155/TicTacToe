@@ -58,16 +58,13 @@ final class GameEngine {
 		case .second: currentPlayerSymbol = .nought
 		}
 
-		let column1 = (boxes[0][0] == currentPlayerSymbol &&
-			boxes[1][0] == currentPlayerSymbol &&
-			boxes[2][0] == currentPlayerSymbol)
-		let column2 = (boxes[0][1] == currentPlayerSymbol &&
-			boxes[1][1] == currentPlayerSymbol &&
-			boxes[2][1] == currentPlayerSymbol)
-		let column3 = (boxes[0][2] == currentPlayerSymbol &&
-			boxes[1][2] == currentPlayerSymbol &&
-			boxes[2][2] == currentPlayerSymbol)
+		for column in 0..<boxes.count {
+			let completed = (boxes[0][column] == currentPlayerSymbol &&
+				boxes[1][column] == currentPlayerSymbol &&
+				boxes[2][column] == currentPlayerSymbol)
+			if completed { return true }
+		}
 
-		return column1 || column2 || column3
+		return false
 	}
 }
