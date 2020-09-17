@@ -16,6 +16,8 @@ protocol GameEngineDelegate {
 	func played(at row: Int, column: Int, by player: Player)
 
 	func gameOver(by player: Player)
+
+	func rejected(at row: Int, column: Int)
 }
 
 final class GameEngine {
@@ -39,16 +41,20 @@ final class GameEngine {
 	func play(atRow row: Int, column: Int) {
 
 		// Make the move
-		boxes[row][column] = (currentTurn == .first) ? .cross : .nought
+		fill(at: row, column: column)
 
 		// Update the delegate
 		delegate.played(at: row, column: column, by: currentTurn)
 
 		// Switch the turn
-		switch currentTurn {
-		case .first: currentTurn = .second
-		case .second: currentTurn = .first
+		currentTurn = (currentTurn == .first) ? .second : .first
+	}
+
+	private func fill(at row: Int, column: Int) {
+		guard boxes[row][column] == .empty else {
+			return delegate.rejected(at: row, column: column)
 		}
+		boxes[row][column] = (currentTurn == .first) ? .cross : .nought
 	}
 
 	private func isGameOver() -> Bool {
@@ -57,10 +63,10 @@ final class GameEngine {
 		// Checking if any columns or rows has been marked by a single player, so we can declare as a win
 		for column in 0..<boxes.count {
 			for row in 0..<boxes.count {
-				let completed = (boxes[row][column] == currentPlayerSymbol &&
+				guard (boxes[row][column] == currentPlayerSymbol &&
 					boxes[row][column] == currentPlayerSymbol &&
-					boxes[row][column] == currentPlayerSymbol)
-				if completed { return true }
+					boxes[row][column] == currentPlayerSymbol) else { continue }
+				return true
 			}
 		}
 

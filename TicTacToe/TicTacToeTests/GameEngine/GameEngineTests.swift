@@ -83,6 +83,19 @@ class GameEngineTests: XCTestCase {
 		XCTAssertEqual(sut.boxes[2][1], .empty)
 		XCTAssertEqual(sut.boxes[2][2], .empty)
 	}
+
+	func test_WhenPlayerMoveInAlreadyFilledBox_ThenTheMoveIsRejected() {
+		// given - initialised
+
+		// when
+		sut.play(atRow: 0, column: 0) // Cross
+		sut.play(atRow: 0, column: 0) // Nought - Should be rejected
+
+		// then
+		XCTAssertTrue(delegate.moveRejectedCalled)
+		XCTAssertEqual(delegate.rejectedRow, 0)
+		XCTAssertEqual(delegate.rejectedColumn, 0)
+	}
 }
 // MARK: - Testing wins for columns
 extension GameEngineTests {
@@ -348,6 +361,10 @@ class MockDelegate: GameEngineDelegate {
 	private(set) var isGameoverCalled = false
 	private(set) var gameWonBy: Player?
 
+	private(set) var moveRejectedCalled = false
+	private(set) var rejectedRow: Int?
+	private(set) var rejectedColumn: Int?
+
 	func played(at row: Int, column: Int, by player: Player) {
 		isPlayCalled = true
 		playedRow = row
@@ -358,5 +375,11 @@ class MockDelegate: GameEngineDelegate {
 	func gameOver(by player: Player) {
 		isGameoverCalled = true
 		gameWonBy = player
+	}
+
+	func rejected(at row: Int, column: Int) {
+		moveRejectedCalled = true
+		rejectedRow = row
+		rejectedColumn = column
 	}
 }
