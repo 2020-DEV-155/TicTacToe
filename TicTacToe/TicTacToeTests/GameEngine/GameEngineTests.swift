@@ -377,6 +377,31 @@ extension GameEngineTests {
 	}
 }
 
+// MARK: - Testing diagonal wins
+extension GameEngineTests {
+
+	func test_WhenFirstPlayerMarksLeftToRightDiagonalSequence_ThenDelegateIsCalled() {
+		// given - initialised
+
+		// when
+		/*
+		X | - | -
+		0 | X | -
+		0 | - | X
+		*/
+		sut.play(atRow: 0, column: 0) // Cross
+		sut.play(atRow: 1, column: 0) // Nought
+		sut.play(atRow: 1, column: 1) // Cross
+		sut.play(atRow: 2, column: 0) // Nought
+		sut.play(atRow: 2, column: 2) // Cross
+
+		// then
+		assertGameOverTrueAndDrawFalse()
+		XCTAssertEqual(delegate.gameWonBy, .first)
+		compare(winningCombination: delegate.winningCombination, with: [ (0,0), (1,1), (2,2)])
+	}
+}
+
 class MockDelegate: GameEngineDelegate {
 
 	private(set) var isPlayCalled = false

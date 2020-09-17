@@ -58,17 +58,12 @@ final class GameEngine {
 	private func checkForGameResult() {
 		let currentPlayerSymbol: Symbols = (currentTurn == .first) ? .cross : .nought
 
-		var winningCombinationFound = false
-		var winningCombination = [(Int, Int)]()
-
 		// Checking if any columns has been marked by a single player, so we can declare as a win
 		for column in 0..<boxes.count {
 			guard (boxes[0][column] == currentPlayerSymbol &&
 				boxes[1][column] == currentPlayerSymbol &&
 				boxes[2][column] == currentPlayerSymbol) else { continue }
-			winningCombinationFound = true
-			winningCombination = [ (0, column), (1, column), (2, column) ]
-			break
+			return delegate.gameOver(result: .win(currentTurn, [ (0, column), (1, column), (2, column) ]))
 		}
 
 		// Checking if any rows has been marked by a single player, so we can declare as a win
@@ -76,13 +71,14 @@ final class GameEngine {
 			guard (boxes[row][0] == currentPlayerSymbol &&
 				boxes[row][1] == currentPlayerSymbol &&
 				boxes[row][2] == currentPlayerSymbol) else { continue }
-			winningCombinationFound = true
-			winningCombination = [ (row, 0), (row, 1), (row, 2) ]
-			break
+			return delegate.gameOver(result: .win(currentTurn, [ (row, 0), (row, 1), (row, 2) ]))
 		}
 
-		if winningCombinationFound {
-			delegate.gameOver(result: .win(currentTurn, winningCombination))
+		// Checking if left to right diagonal sequence is marked
+		if (boxes[0][0] == currentPlayerSymbol &&
+			boxes[1][1] == currentPlayerSymbol &&
+			boxes[2][2] == currentPlayerSymbol) {
+			return delegate.gameOver(result: .win(currentTurn, [ (0, 0), (1, 1), (2, 2) ]))
 		}
 	}
 }
