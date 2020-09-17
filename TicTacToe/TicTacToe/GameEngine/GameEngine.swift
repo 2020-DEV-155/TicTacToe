@@ -52,24 +52,16 @@ final class GameEngine {
 	}
 
 	private func isGameOver() -> Bool {
-		let currentPlayerSymbol: Symbols!
-		switch currentTurn {
-		case .first: currentPlayerSymbol = .cross
-		case .second: currentPlayerSymbol = .nought
-		}
+		let currentPlayerSymbol: Symbols = (currentTurn == .first) ? .cross : .nought
 
+		// Checking if any columns or rows has been marked by a single player, so we can declare as a win
 		for column in 0..<boxes.count {
-			let completed = (boxes[0][column] == currentPlayerSymbol &&
-				boxes[1][column] == currentPlayerSymbol &&
-				boxes[2][column] == currentPlayerSymbol)
-			if completed { return true }
-		}
-
-		for row in 0..<boxes.count {
-			let completed = (boxes[row][0] == currentPlayerSymbol &&
-				boxes[row][1] == currentPlayerSymbol &&
-				boxes[row][2] == currentPlayerSymbol)
-			if completed { return true }
+			for row in 0..<boxes.count {
+				let completed = (boxes[row][column] == currentPlayerSymbol &&
+					boxes[row][column] == currentPlayerSymbol &&
+					boxes[row][column] == currentPlayerSymbol)
+				if completed { return true }
+			}
 		}
 
 		return false
