@@ -66,18 +66,7 @@ final class GameEngine {
 
 		guard !checkForRightToLeftDiagonalWin(currentPlayerSymbol) else { return }
 
-		guard !checkForDraw() else { return }
-	}
-
-	private func areAllBoxesFilled() -> Bool {
-		for column in 0..<boxes.count {
-			if (boxes[0][column] == .empty ||
-				boxes[1][column] == .empty ||
-				boxes[2][column] == .empty) {
-				return false
-			}
-		}
-		return true
+		guard !checkForDrawAfterWinningChecksAreCompleted() else { return }
 	}
 
 	private func checkForColumsWin(_ currentPlayerSymbol: Symbols) -> Bool {
@@ -122,9 +111,20 @@ final class GameEngine {
 		return true
 	}
 
-	private func checkForDraw() -> Bool {
+	private func checkForDrawAfterWinningChecksAreCompleted() -> Bool {
 		guard areAllBoxesFilled() else { return false }
 		delegate.gameOver(result: .draw)
+		return true
+	}
+
+	private func areAllBoxesFilled() -> Bool {
+		for column in 0..<boxes.count {
+			if (boxes[0][column] == .empty ||
+				boxes[1][column] == .empty ||
+				boxes[2][column] == .empty) {
+				return false
+			}
+		}
 		return true
 	}
 }
