@@ -47,12 +47,13 @@ final class GameEngine {
 
 		// Make the move
 		guard let symbol = fill(at: row, column: column) else { return }
-
-		// Update the delegate
-		delegate.played(at: row, column: column, by: currentTurn, symbol: symbol)
+		let by = currentTurn
 
 		// Switch the turn
 		currentTurn = (currentTurn == .first) ? .second : .first
+
+		// Update the delegate
+		delegate.played(at: row, column: column, by: by, symbol: symbol)
 	}
 
 	func reset() {
