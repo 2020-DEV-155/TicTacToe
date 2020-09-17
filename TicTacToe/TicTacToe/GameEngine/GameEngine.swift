@@ -15,7 +15,7 @@ protocol GameEngineDelegate {
 
 	func played(at row: Int, column: Int, by player: Player)
 
-	func gameOver(by player: Player)
+	func gameOver(result: GameEngine.Result)
 
 	func rejected(at row: Int, column: Int)
 }
@@ -27,9 +27,7 @@ final class GameEngine {
 	private(set) var currentTurn: Player = .first
 	private(set) var boxes: [[Symbols]] {
 		didSet {
-			if isGameOver() {
-				delegate.gameOver(by: currentTurn)
-			}
+			checkForGameResult()
 		}
 	}
 
@@ -57,19 +55,42 @@ final class GameEngine {
 		boxes[row][column] = (currentTurn == .first) ? .cross : .nought
 	}
 
-	private func isGameOver() -> Bool {
+	private func checkForGameResult() {
 		let currentPlayerSymbol: Symbols = (currentTurn == .first) ? .cross : .nought
 
-		// Checking if any columns or rows has been marked by a single player, so we can declare as a win
+		var winningCombinationFound = false
+		var winningCombination = [(Int, Int)]()
+
+		// Checking if any columns has been marked by a single player, so we can declare as a win
 		for column in 0..<boxes.count {
-			for row in 0..<boxes.count {
-				guard (boxes[row][column] == currentPlayerSymbol &&
-					boxes[row][column] == currentPlayerSymbol &&
-					boxes[row][column] == currentPlayerSymbol) else { continue }
-				return true
-			}
+			guard (boxes[0][column] == currentPlayerSymbol &&
+				boxes[1][column] == currentPlayerSymbol &&
+				boxes[2][column] == currentPlayerSymbol) else { continue }
+			winningCombinationFound = true
+			winningCombination = [ (0, column), (1, column), (2, column) ]
+			break
 		}
 
-		return false
+		// Checking if any rows has been marked by a single player, so we can declare as a win
+		for row in 0..<boxes.count {
+			guard (boxes[row][0] == currentPlayerSymbol &&
+				boxes[row][1] == currentPlayerSymbol &&
+				boxes[row][2] == currentPlayerSymbol) else { continue }
+			winningCombinationFound = true
+			winningCombination = [ (row, 0), (row, 1), (row, 2) ]
+			break
+		}
+
+		if winningCombinationFound {
+			delegate.gameOver(result: .win(currentTurn, winningCombination))
+		}
+	}
+}
+
+extension GameEngine {
+
+	enum Result {
+		case win(_ player: Player, _ boxes: [(Int, Int)])
+		case draw
 	}
 }

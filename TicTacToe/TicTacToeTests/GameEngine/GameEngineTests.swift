@@ -15,6 +15,15 @@ class GameEngineTests: XCTestCase {
 		sut = nil
     }
 
+	private func compare(winningCombination: [(Int, Int)]?, with expected: [(Int, Int)]) {
+		XCTAssertEqual(winningCombination?[0].0, expected[0].0)
+		XCTAssertEqual(winningCombination?[0].1, expected[0].1)
+		XCTAssertEqual(winningCombination?[1].0, expected[1].0)
+		XCTAssertEqual(winningCombination?[1].1, expected[1].1)
+		XCTAssertEqual(winningCombination?[2].0, expected[2].0)
+		XCTAssertEqual(winningCombination?[2].1, expected[2].1)
+	}
+
 	func test_WhenInitialised_ThenPlayer1HasTurn() {
 		// given & when - initialised
 
@@ -117,7 +126,9 @@ extension GameEngineTests {
 
 		// then
 		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertFalse(delegate.isGameDraw)
 		XCTAssertEqual(delegate.gameWonBy, .first)
+		compare(winningCombination: delegate.winningCombination, with: [ (0,0), (1,0), (2,0)])
 	}
 
 	func test_WhenSecondPlayerMarksEntireColumn1_ThenDelegateIsCalled() {
@@ -138,7 +149,9 @@ extension GameEngineTests {
 
 		// then
 		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertFalse(delegate.isGameDraw)
 		XCTAssertEqual(delegate.gameWonBy, .second)
+		compare(winningCombination: delegate.winningCombination, with: [ (0,0), (1,0), (2,0)])
 	}
 
 	func test_WhenFirstPlayerMarksEntireColumn2_ThenDelegateIsCalled() {
@@ -158,7 +171,9 @@ extension GameEngineTests {
 
 		// then
 		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertFalse(delegate.isGameDraw)
 		XCTAssertEqual(delegate.gameWonBy, .first)
+		compare(winningCombination: delegate.winningCombination, with: [ (0,1), (1,1), (2,1)])
 	}
 
 	func test_WhenSecondPlayerMarksEntireColumn2_ThenDelegateIsCalled() {
@@ -179,7 +194,9 @@ extension GameEngineTests {
 
 		// then
 		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertFalse(delegate.isGameDraw)
 		XCTAssertEqual(delegate.gameWonBy, .second)
+		compare(winningCombination: delegate.winningCombination, with: [ (0,1), (1,1), (2,1)])
 	}
 
 	func test_WhenFirstPlayerMarksEntireColumn3_ThenDelegateIsCalled() {
@@ -199,7 +216,9 @@ extension GameEngineTests {
 
 		// then
 		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertFalse(delegate.isGameDraw)
 		XCTAssertEqual(delegate.gameWonBy, .first)
+		compare(winningCombination: delegate.winningCombination, with: [ (0,2), (1,2), (2,2)])
 	}
 
 	func test_WhenSecondPlayerMarksEntireColumn3_ThenDelegateIsCalled() {
@@ -220,7 +239,9 @@ extension GameEngineTests {
 
 		// then
 		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertFalse(delegate.isGameDraw)
 		XCTAssertEqual(delegate.gameWonBy, .second)
+		compare(winningCombination: delegate.winningCombination, with: [ (0,2), (1,2), (2,2)])
 	}
 }
 
@@ -244,7 +265,9 @@ extension GameEngineTests {
 
 		// then
 		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertFalse(delegate.isGameDraw)
 		XCTAssertEqual(delegate.gameWonBy, .first)
+		compare(winningCombination: delegate.winningCombination, with: [ (0,0), (0,1), (0,2)])
 	}
 
 	func test_WhenSecondPlayerMarksEntireRow1_ThenDelegateIsCalled() {
@@ -265,7 +288,9 @@ extension GameEngineTests {
 
 		// then
 		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertFalse(delegate.isGameDraw)
 		XCTAssertEqual(delegate.gameWonBy, .second)
+		compare(winningCombination: delegate.winningCombination, with: [ (0,0), (0,1), (0,2)])
 	}
 
 	func test_WhenFirstPlayerMarksEntireRow2_ThenDelegateIsCalled() {
@@ -285,7 +310,9 @@ extension GameEngineTests {
 
 		// then
 		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertFalse(delegate.isGameDraw)
 		XCTAssertEqual(delegate.gameWonBy, .first)
+		compare(winningCombination: delegate.winningCombination, with: [ (1,0), (1,1), (1,2)])
 	}
 
 	func test_WhenSecondPlayerMarksEntireRow2_ThenDelegateIsCalled() {
@@ -306,7 +333,9 @@ extension GameEngineTests {
 
 		// then
 		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertFalse(delegate.isGameDraw)
 		XCTAssertEqual(delegate.gameWonBy, .second)
+		compare(winningCombination: delegate.winningCombination, with: [ (1,0), (1,1), (1,2)])
 	}
 
 	func test_WhenFirstPlayerMarksEntireRow3_ThenDelegateIsCalled() {
@@ -326,7 +355,9 @@ extension GameEngineTests {
 
 		// then
 		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertFalse(delegate.isGameDraw)
 		XCTAssertEqual(delegate.gameWonBy, .first)
+		compare(winningCombination: delegate.winningCombination, with: [ (2,0), (2,1), (2,2)])
 	}
 
 	func test_WhenSecondPlayerMarksEntireRow3_ThenDelegateIsCalled() {
@@ -347,7 +378,9 @@ extension GameEngineTests {
 
 		// then
 		XCTAssertTrue(delegate.isGameoverCalled)
+		XCTAssertFalse(delegate.isGameDraw)
 		XCTAssertEqual(delegate.gameWonBy, .second)
+		compare(winningCombination: delegate.winningCombination, with: [ (2,0), (2,1), (2,2)])
 	}
 }
 
@@ -359,7 +392,9 @@ class MockDelegate: GameEngineDelegate {
 	private(set) var by: Player?
 
 	private(set) var isGameoverCalled = false
+	private(set) var isGameDraw = false
 	private(set) var gameWonBy: Player?
+	private(set) var winningCombination: [(Int, Int)]?
 
 	private(set) var moveRejectedCalled = false
 	private(set) var rejectedRow: Int?
@@ -372,9 +407,15 @@ class MockDelegate: GameEngineDelegate {
 		by = player
 	}
 
-	func gameOver(by player: Player) {
+	func gameOver(result: GameEngine.Result) {
 		isGameoverCalled = true
-		gameWonBy = player
+		switch result {
+		case .win(let player, let boxes):
+			gameWonBy = player
+			winningCombination = boxes
+		case .draw:
+			isGameDraw = true
+		}
 	}
 
 	func rejected(at row: Int, column: Int) {
