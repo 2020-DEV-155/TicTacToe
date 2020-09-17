@@ -83,6 +83,9 @@ class GameEngineTests: XCTestCase {
 		XCTAssertEqual(sut.boxes[2][1], .empty)
 		XCTAssertEqual(sut.boxes[2][2], .empty)
 	}
+}
+// MARK: - Testing wins for columns
+extension GameEngineTests {
 
 	func test_WhenFirstPlayerMarksEntireColumn1_ThenDelegateIsCalled() {
 		// given - initialised
